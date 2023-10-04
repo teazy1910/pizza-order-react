@@ -73,7 +73,7 @@ function Menu() {
     <main className="menu">
       <h2>Our Menu</h2>
 
-      <ul>
+      <ul className="pizzas">
         {pizzaData.map((pizza) => (
           // A unique key is needed when lists are used
         <Pizza pizzaObj={pizza} key={pizza.name}/>
