@@ -6,42 +6,42 @@ const pizzaData = [
     name: "Focaccia",
     ingredients: "Bread with italian olive oil and rosemary",
     price: 6,
-    photoName: "pizza/focaccia.jpg",
+    photoName: "pizzas/focaccia.jpg",
     soldOut: false,
   },
   {
     name: "Pizza Margherita",
     ingredients: "Tomato and mozarella",
     price: 10,
-    photoName: "pizza/margherita.jpg",
+    photoName: "pizzas/margherita.jpg",
     soldOut: false,
   },
   {
     name: "Pizza Spinaci",
     ingredients: "Tomato, mozarella, spinach, and ricotta cheese",
     price: 12,
-    photoName: "pizza/spinaci.jpg",
+    photoName: "pizzas/spinaci.jpg",
     soldOut: false,
   },
   {
     name: "Pizza Funghi",
     ingredients: "Tomato, mozarella, mushrooms, and onion",
     price: 12,
-    photoName: "pizza/funghi.jpg",
+    photoName: "pizzas/funghi.jpg",
     soldOut: false,
   },
   {
     name: "Pizza Salamino",
     ingredients: "Tomato, mozarella, and pepperoni",
     price: 15,
-    photoName: "pizza/salamino.jpg",
+    photoName: "pizzas/salamino.jpg",
     soldOut: true,
   },
   {
     name: "Pizza Prosciutto",
     ingredients: "Tomato, mozarella, ham, aragula, and burrata cheese",
     price: 18,
-    photoName: "pizza/prosciutto.jpg",
+    photoName: "pizzas/prosciutto.jpg",
     soldOut: false,
   },
 ];
@@ -55,7 +55,7 @@ function App() {
     </div>
   );
 }
-// Components / Können auch als Arrow Funktions geschriebene werden
+
 function Header() {
   const style = {};
   return (
@@ -66,50 +66,48 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
 
-
-  
   return (
     <main className="menu">
       <h2>Our Menu</h2>
 
-      <ul className="pizzas">
-        {pizzaData.map((pizza) => (
-          // A unique key is needed when lists are used
-        <Pizza pizzaObj={pizza} key={pizza.name}/>
-        ))}
-      </ul>
+         {/* <> </> -> Ein Fragment so gruppieren ohne eine Spur im HTML Baum zu hinterlassen*/}
 
-
-      {/* <Pizza
-        // Props:
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozzarella, Spinach and ricotta"
-        photoName="pizza/spinaci.jpg"
-        price={10}
-      />
-      <Pizza
-        name="Pizza Funghi"
-        ingredients="Tomato, Mozzarella, Mushrooms"
-        price={12}
-        photoName="pizza/funghi.jpg"
-      /> */}
+      {numPizzas > 0 ? (
+        <> 
+          <p>
+            Authentic italien cuisine. 6 creatice dishes to choose from. All
+            from our stone oven. All organic. All delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              //  // A unique key is needed when lists are used
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu. Please come back later </p>
+      )}
     </main>
   );
 }
 
-//components in React sind Funktionen mit einem Großbuchstaben
-// die Funktion gibt ein Markup zurück (JSX)
-function Pizza(props) {
-  // die o.g. Props werden übergeben und ausgegeben
-  //console.log(props);
+function Pizza({pizzaObj}) {
+  console.log(pizzaObj);
+
+  if (pizzaObj.soldOut) return null;
+
   return (
-    <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -118,25 +116,38 @@ function Pizza(props) {
 function Footer() {
   const hour = new Date().getHours();
   const openHour = 12;
-  const closeHour = 22;
+  const closeHour = 24;
   const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
-  // if (hour >= openHour && hour <= closeHour) alert("We're currently open!");
-  // else alert("Sorry, we're closed");
+
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}.We're currently open!
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          Welcome you between {openHour}:00 and {closeHour}:00.
+        </p>
+      )}
     </footer>
-    // );
-    // ohne JSX geschrieben
-    // return React.createElement("footer", null, "We're currently now open");
   );
 }
 
-// React Version 18
+function Order({ openHour, closeHour }) {
+  return (
+    <div className="order">
+      <p>
+        We're open from {openHour}:00 to {closeHour}:00. Come visit us or order
+        online.
+      </p>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
 );
