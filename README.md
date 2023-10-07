@@ -5,4 +5,4 @@
 
 ## Screenshot
 
-<img src="/public/pizza/screenshot.png" alt="Pizza Menu App" title="" />
+![Alt-Text](/pizzas/screenshot.png "optionaler Titel")
